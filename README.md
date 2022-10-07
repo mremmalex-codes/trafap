@@ -8,11 +8,9 @@ a simple traffic application with token rewards and social networking
 1 install python 
     www.python.org
      download your os version
-
 ```bash 
 $ pip install pipenv 
 ```
-
 #### activate a virtual environment using pipenv
 ```bash
 $ pipenv shell

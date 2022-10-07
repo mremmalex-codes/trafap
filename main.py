@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.modules import auth
+from src.modules import auth, traffic
 from src.utils.prisma import prisma
 
 
@@ -9,12 +9,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "*"
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=["*"]
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -32,4 +30,6 @@ async def handle_stop():
 async def get_home_handler():
     return {"message": "hello world"}
 
+
 app.include_router(auth.router)
+app.include_router(traffic.router)

@@ -12,21 +12,24 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
   password  String
-  email     String   @unique
-  blogs     Blog[]
-  create_at DateTime @default(now())
-  update_at DateTime @updatedAt
+  email     String    @unique
+  blogs     Traffic[]
+  create_at DateTime  @default(now())
+  update_at DateTime  @updatedAt
 }
 
-model Blog {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  create_at DateTime @default(now())
-  update_at DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id])
+model Traffic {
+  id        Int       @id @default(autoincrement())
+  location  String
+  message   String
+  start     DateTime?
+  stop      DateTime?
+  zipcode   Int?
+  create_at DateTime  @default(now())
+  update_at DateTime  @updatedAt
+  User      User?     @relation(fields: [userId], references: [id])
   userId    Int?
 }
