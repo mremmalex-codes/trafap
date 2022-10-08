@@ -1,8 +1,10 @@
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from src.utils.prisma import prisma
+from src.utils.jwt_token import genereate_accesstoken
 import pydantic
 
 # import pyjwt
@@ -118,12 +120,17 @@ async def login_handler(data: LoginData):
         )
 
         if is_password_match:
-            # accesstoken = pyjwt.encode()
+            accesstoken = await genereate_accesstoken(
+                {
+                    "username": is_user_exits.username,
+                    "id": is_user_exits.id,
+                }
+            )
             return JSONResponse(
                 {
                     "message": "login successful",
                     "error": False,
-                    "data": {"username": is_user_exits.username},
+                    "token": jsonable_encoder(accesstoken),
                     "statusCode": status.HTTP_202_ACCEPTED,
                 },
                 status_code=status.HTTP_202_ACCEPTED,
