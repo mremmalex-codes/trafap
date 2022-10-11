@@ -2,8 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider  = "prisma-client-py"
-    interface = "asyncio"
+    provider        = "prisma-client-py"
+    interface       = "asyncio"
+    previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -17,29 +18,29 @@ model User {
     password  String
     email     String    @unique
     traffics  Traffic[]
+    points    Points?
     create_at DateTime  @default(now())
     update_at DateTime  @updatedAt
-    points    Points?
 }
 
 model Traffic {
-    id          Int       @id @default(autoincrement())
+    id          Int      @id @default(autoincrement())
     location    String
     state       String
     description String
     status      String
-    active      Boolean   @default(true)
-    time        DateTime?
-    date        DateTime?
-    create_at   DateTime  @default(now())
-    update_at   DateTime  @updatedAt
-    User        User?     @relation(fields: [userId], references: [id])
+    active      Boolean  @default(true)
+    create_at   DateTime @default(now())
+    update_at   DateTime @updatedAt
+    User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId      Int?
 }
 
 model Points {
-    id     Int     @id @default(autoincrement())
-    points Decimal @default(0.00)
-    user   User    @relation(fields: [userId], references: [id])
-    userId Int     @unique
+    id        Int      @id @default(autoincrement())
+    points    Decimal  @default(0.00)
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    Int      @unique
+    create_at DateTime @default(now())
+    update_at DateTime @updatedAt
 }

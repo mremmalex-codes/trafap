@@ -1,5 +1,3 @@
-from datetime import datetime
-from typing import Optional
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
@@ -15,10 +13,9 @@ class Traffic(BaseModel):
     """
 
     location: str
+    state: str
     description: str
-    priroity: str = "N/A"
-    start: Optional[datetime]
-    stop: Optional[datetime]
+    status: str
 
 
 class UpdateTraffic(BaseModel):
@@ -42,14 +39,14 @@ async def handle_traffic_search(query: str):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    results = await prisma.traffic.find_many(where={"location": query})
+    results = await prisma.traffic.find_many(where={"location": {"contains": query}})
 
     if not results:
         return JSONResponse(
             {
                 "message": "No Result Found For This Search Query",
                 "statusCode": status.HTTP_404_NOT_FOUND,
-                "data": None,
+                "data": [],
                 "error": True,
             },
             status_code=status.HTTP_404_NOT_FOUND,
@@ -68,7 +65,7 @@ async def handle_traffic_search(query: str):
     )
 
 
-@router.post("/addUpdate")
+@router.post("/addTraffic")
 async def handle_adding_traffic_update(update: Traffic) -> JSONResponse:
     """
     this endpoint handles the the adding of new traffic
@@ -77,11 +74,11 @@ async def handle_adding_traffic_update(update: Traffic) -> JSONResponse:
     result = await prisma.traffic.create(
         data={
             "location": update.location,
-            "message": update.description,
-            "start": update.start,
+            "state": update.state,
+            "status": update.status,
+            "description": update.description,
         }
     )
-
     json_comp_data = jsonable_encoder(result)
 
     return JSONResponse(
@@ -95,14 +92,43 @@ async def handle_adding_traffic_update(update: Traffic) -> JSONResponse:
     )
 
 
-@router.patch("/updateTrafficInfo/{id}")
-async def handle_traffic_data_update(id: int) -> JSONResponse:
+@router.get("/trafficInfo/{id}")
+async def handle_traffic_data_info(id: int) -> JSONResponse:
     """
-    this endpoint takes a traffic id and updates
-    changing the status if there is no more traffic in
-    that area
+    this endpoint takes a traffic id and returns the info for
+    that specific traffic data
     """
     result = await prisma.traffic.find_unique(where={"id": id})
+    if not result:
+        return JSONResponse(
+            {
+                "error": True,
+                "statusCode": status.HTTP_404_NOT_FOUND,
+                "data": None,
+                "message": "no traffic data with this id",
+            },
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+    json_serialize = jsonable_encoder(result)
+    return JSONResponse(
+        {
+            "error": False,
+            "statusCode": status.HTTP_200_OK,
+            "data": json_serialize,
+            "message": "traffic data updated successfully",
+        },
+        status_code=status.HTTP_200_OK,
+    )
+
+
+@router.patch("/updateTrafficInfo/{id}")
+async def handle_trafiic_info_update(id: int) -> JSONResponse:
+    result = await prisma.traffic.update(
+        where={
+            "id": id,
+        },
+        data={"active": False},
+    )
     if not result:
         return JSONResponse(
             {
@@ -129,7 +155,7 @@ async def handle_traffic_data_update(id: int) -> JSONResponse:
 async def handle_all_traffic(skip: int = 0, take: int = 9) -> JSONResponse:
     """
     this endpoint returns all the traffic in the database
-    with 9 pagination
+    with pagination which return 9 traffic update par page
     """
     result = await prisma.traffic.find_many(
         skip=skip, take=take, cursor={"id": 1}, order={"id": "asc"}
@@ -139,7 +165,7 @@ async def handle_all_traffic(skip: int = 0, take: int = 9) -> JSONResponse:
             {
                 "error": True,
                 "statusCode": status.HTTP_404_NOT_FOUND,
-                "data": None,
+                "data": [],
                 "message": "no traffic data yet",
             },
             status_code=status.HTTP_404_NOT_FOUND,
