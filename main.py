@@ -4,7 +4,7 @@ from src.modules import auth, traffic
 from src.utils.prisma import prisma
 import uvicorn
 
-app = FastAPI()
+app = FastAPI()		
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,6 +32,7 @@ async def get_home_handler():
 
 app.include_router(auth.router)
 app.include_router(traffic.router)
+
 
 
 if __name__ == "__main__":

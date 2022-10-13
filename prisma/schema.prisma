@@ -38,7 +38,7 @@ model Traffic {
 
 model Points {
     id        Int      @id @default(autoincrement())
-    points    Decimal  @default(0.00)
+    points    Float    @default(0.00)
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    Int      @unique
     create_at DateTime @default(now())

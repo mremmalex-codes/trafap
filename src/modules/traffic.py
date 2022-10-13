@@ -75,8 +75,8 @@ async def handle_adding_traffic_update(update: Traffic) -> JSONResponse:
         data={
             "location": update.location,
             "state": update.state,
-            "status": update.status,
             "description": update.description,
+            "status": update.status,
         }
     )
     json_comp_data = jsonable_encoder(result)

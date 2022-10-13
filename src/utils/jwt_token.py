@@ -1,7 +1,7 @@
 from typing import Any, Dict
+from datetime import datetime, timedelta
 import os
 from jose import jwt
-import time
 
 secret_key = os.environ.get("SECRET_KEY")
 
@@ -11,7 +11,8 @@ async def genereate_accesstoken(userdata: Dict[str, Any]) -> Any:
         {
             "username": userdata["username"],
             "id": userdata["id"],
-            "expires": time.time() + 600,
+            "exp": datetime.utcnow() + timedelta(hours=1),
+            # "expires": time.time() + 600, # this is using python time module
         },
         key=str(secret_key),
         algorithm="HS256",

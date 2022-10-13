@@ -7,9 +7,6 @@ from src.utils.prisma import prisma
 from src.utils.jwt_token import genereate_accesstoken
 import pydantic
 
-# import pyjwt
-
-
 router = APIRouter(prefix="/auth")
 
 password_hasher = PasswordHasher()
@@ -86,6 +83,7 @@ async def register_handler(data: RegisterData):
             "email": data.email,
         }
     )
+
     return JSONResponse(
         {
             "message": "Account Created",
