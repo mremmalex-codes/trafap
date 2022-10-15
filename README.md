@@ -1,4 +1,4 @@
-## Trafap 
+# Trafap 
 
 a simple traffic application with token rewards and social networking 
 
@@ -20,7 +20,7 @@ $ pipenv shell
 $ pipenv sync
 
 ```
-# run database commands 
+## run database commands 
 
 ### sync your database with the schema 
 ```shell
