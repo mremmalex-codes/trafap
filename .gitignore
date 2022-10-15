@@ -1,6 +1,6 @@
 node_modules
 # Keep environment variables out of version control
-# .env
+.env
 venv/
 */**/__pycache__/
 __pycache__/
@@ -8,3 +8,7 @@ __pycache__/
 *.pyo
 .cache
 .DS_Store
+pgdata
+cred.txt
+.prod.env
+.dev.env

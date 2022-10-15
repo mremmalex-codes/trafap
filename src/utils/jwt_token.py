@@ -1,6 +1,7 @@
-from typing import Any, Dict
-from datetime import datetime, timedelta
 import os
+from datetime import datetime, timedelta
+from typing import Any, Dict
+
 from jose import jwt
 
 secret_key = os.environ.get("SECRET_KEY")
