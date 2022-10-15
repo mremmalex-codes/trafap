@@ -22,11 +22,11 @@ $ pipenv sync
 ```
 ## run database commands 
 
-### sync your database with the schema 
+#### sync your database with the schema 
 ```shell
 $ prisma db push
 ```
-### generate database client for prisma
+#### generate database client for prisma
 ```shell
 $ prisma generate
 ```
