@@ -1,12 +1,28 @@
-version: '3.4'
+version: "3.4"
 
 services:
   trafap:
     image: trafap
     build:
       context: .
-      dockerfile: ./Dockerfile
-    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn main:app --host 0.0.0.0 --port 8080"]
+      dockerfile: ./Dockerfile.dev
     ports:
       - 8080:8080
-      - 5678:5678
+    depends_on:
+      - database
+    volumes:
+      - "./:/app"
+  
+  database:
+      image: postgres:14-alpine
+      restart: always 
+      volumes:
+        - ./pgdata:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=trafap
+      ports:
+        - "5433:5432"
+volumes:
+  pgdata:

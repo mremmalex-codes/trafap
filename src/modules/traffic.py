@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from src.utils.prisma import prisma
 
-router = APIRouter(prefix="/traffic")
+router: APIRouter = APIRouter(prefix="/traffic")
 
 
 class Traffic(BaseModel):
@@ -39,7 +39,11 @@ async def handle_traffic_search(query: str):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    results = await prisma.traffic.find_many(where={"location": {"contains": query}})
+    results = await prisma.traffic.find_many(
+                                where={
+                                    "location": {"contains": query}
+                                    }
+                                )
 
     if not results:
         return JSONResponse(

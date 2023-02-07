@@ -16,6 +16,7 @@ COPY ./prisma /app/prisma
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
+RUN sleep 10
 RUN prisma db push 
 RUN prisma generate
 
