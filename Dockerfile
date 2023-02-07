@@ -13,7 +13,6 @@ ENV PYTHONUNBUFFERED=1
 # copy neccessary file to the code
 COPY ./requirements.txt /app/requirements.txt
 COPY ./prisma /app/prisma
-COPY ./.dev.env /app/.env
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
