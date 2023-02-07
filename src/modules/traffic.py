@@ -99,6 +99,7 @@ async def handle_traffic_data_info(id: int) -> JSONResponse:
     that specific traffic data
     """
     result = await prisma.traffic.find_unique(where={"id": id})
+
     if not result:
         return JSONResponse(
             {
@@ -109,7 +110,9 @@ async def handle_traffic_data_info(id: int) -> JSONResponse:
             },
             status_code=status.HTTP_404_NOT_FOUND,
         )
+
     json_serialize = jsonable_encoder(result)
+
     return JSONResponse(
         {
             "error": False,

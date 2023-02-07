@@ -1,13 +1,11 @@
 import os
 from datetime import datetime, timedelta
 from typing import Any, Dict
-
 from jose import jwt
 
 secret_key = os.environ.get("SECRET_KEY")
 
-
-async def genereate_accesstoken(userdata: Dict[str, Any]) -> Any:
+async def genereate_accesstoken(userdata: Dict[str, Any]) -> str:
     token = jwt.encode(
         {
             "username": userdata["username"],

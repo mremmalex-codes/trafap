@@ -36,7 +36,7 @@ model Traffic {
     userId      Int?
 }
 
-model Points {
+model Wallets {
     id        Int      @id @default(autoincrement())
     points    Float    @default(0.00)
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
