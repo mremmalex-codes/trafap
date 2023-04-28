@@ -48,7 +48,9 @@ async def register_handler(data: RegisterData):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    is_username_exist = await prisma.user.find_unique(where={"username": data.username})
+    is_username_exist = await prisma.user.find_unique(
+                        where={"username": data.username}
+                        )
 
     is_email_exist = await prisma.user.find_unique(where={"email": data.email})
 
@@ -100,7 +102,9 @@ async def register_handler(data: RegisterData):
 
 @router.post("/login")
 async def login_handler(data: LoginData):
-    is_user_exits = await prisma.user.find_unique(where={"username": data.username})
+    is_user_exits = await prisma.user.find_unique(
+                        where={"username": data.username}
+                        )
 
     if not is_user_exits:
         return JSONResponse(

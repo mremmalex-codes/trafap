@@ -2,6 +2,7 @@ from functools import wraps
 
 # from fastapi.
 
+
 def required_user(func):
     """
     creating a middleware that will check if the user
